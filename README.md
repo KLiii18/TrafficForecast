@@ -30,6 +30,9 @@ The traffic dataset is sourced from: https://open-traffic.epfl.ch/
 | `lat` | The latitude of the vehicle at a specific point in time. |
 | `lon` | The longitude of the vehicle at a specific point in time. |
 | `speed` | The instantaneous speed of the vehicle at the time the data is recorded. |
+| `lon_acc` | Longitudinal acceleration indicates whether the vehicle is accelerating or decelerating in the direction of travel. |
+| `lat_acc` | Lateral acceleration reflects movement to the left/right or when the vehicle is cornering. |
+| `time` | Time elapsed since vehicle tracking began. |
 
 ---
 
