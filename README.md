@@ -19,18 +19,17 @@ TrafficForecast processes drone-derived vehicle tracking data and produces conge
 
 # Data
 
-The raw traffic dataset includes these columns:
+The traffic dataset is sourced from: https://open-traffic.epfl.ch/
 
-- `track_id`
-- `type`
-- `traveled_d`
-- `avg_speed`
-- `lat`
-- `lon`
-- `speed`
-- `lon_acc`
-- `lat_acc`
-- `time`
+| Column | Description |
+|--------|-------------|
+| `track_id` | Each vehicle is tracked using a unique identifier. All data points belonging to the same vehicle will have the same `track_id`. |
+| `type` | Type of vehicle, for example: Motorcycle, Car, Bus, Heavy Vehicle, ... |
+| `traveled_d` | The total distance the vehicle traveled during the tracking period. |
+| `avg_speed` | The average speed of the vehicle over the entire travel route. |
+| `lat` | The latitude of the vehicle at a specific point in time. |
+| `lon` | The longitude of the vehicle at a specific point in time. |
+| `speed` | The instantaneous speed of the vehicle at the time the data is recorded. |
 
 ---
 
@@ -38,24 +37,16 @@ The raw traffic dataset includes these columns:
 
 The feature set used for modeling includes:
 
-- `track_id`
-- `type`
-- `traveled_d`
-- `avg_speed`
-- `lat`
-- `lon`
-- `speed`
-- `lon_acc`
-- `lat_acc`
-- `time`
-- `timestamp_real`
-- `time_str`
-- `time_bin_5m`
-- `unique_track_id`
-- `grid_id`
-- `is_crawling`
-- `is_hard_braking`
-- `pce_factor`
+| Feature | Description |
+|---------|-------------|
+| `timestamp_real` | Real-world timestamp corresponding to the recorded observation. |
+| `time_str` | Human-readable representation of the timestamp, mainly used for visualization and reporting. |
+| `time_bin_5m` | Timestamp aggregated into 5-minute intervals. This feature serves as the primary time index for time-series forecasting. |
+| `unique_track_id` | Globally unique identifier created by combining the timestamp and track ID to avoid duplication across different videos or sessions. |
+| `grid_id` | Spatial grid identifier indicating the grid cell where the vehicle is located. It is commonly used for spatial traffic density analysis. |
+| `is_crawling` | Binary indicator showing whether the vehicle is moving at crawling speed. A value of 1 indicates slow-moving traffic, while 0 indicates normal movement. |
+| `is_hard_braking` | Binary feature indicating whether the vehicle performs hard braking. A value of 1 represents a hard braking event, while 0 means no hard braking. |
+| `pce_factor` | Passenger Car Equivalent (PCE) factor used to convert different vehicle types into an equivalent number of passenger cars, enabling standardized traffic flow analysis. For example, a motorcycle may have a factor of 1.0, while a bus may have a larger factor depending on the adopted traffic engineering standard. |
 
 These engineered features support temporal binning, spatial indexing, and traffic behavior classification.
 
@@ -138,6 +129,7 @@ pip install -r requirements.txt
 ## K-means
 
 ```bash
+python models/kmeans/step1_feature_engineering.py
 python models/kmeans/step2_kmeans_advanced.py
 ```
 
