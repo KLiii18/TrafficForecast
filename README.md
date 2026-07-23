@@ -293,7 +293,8 @@ The forecasting performance is evaluated using:
 
 - MAE (Mean Absolute Error)
 - RMSE (Root Mean Squared Error)
-- MSE (Mean Squared Error)
+- MAPE (Mean Absolute Percentage Error)
+- R² (the Coefficient of Determination)
 
 Comparison between ARIMA and Prophet is performed to determine the better forecasting model.
 
@@ -481,9 +482,3 @@ TrafficForecast was developed as an academic project focusing on traffic analysi
 This project is intended for educational and research purposes.
 
 MIT License.
-
----
-
-<p align="center">
-Made with ❤️ for Urban Traffic Forecasting and Data Science
-</p>
