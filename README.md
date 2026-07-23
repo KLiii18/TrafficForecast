@@ -352,6 +352,14 @@ The following figures illustrate core results from the ARIMA and Prophet pipelin
 
 *Prophet model decomposition showing trend and daily seasonality behavior.*
 
+![K-Means congestion hotspot map](src/models/kmeans/kmeans_hotspot_map.png)
+
+*K-Means clustering results showing congestion hotspot regions in the analyzed traffic dataset.*
+
+![K-Means cluster boxplots](src/models/kmeans/kmeans_proof_boxplots.png)
+
+*Cluster-level distribution of PCE volume and average speed as evidence of congestion segmentation.*
+
 ---
 
 # 🧠 Technologies
