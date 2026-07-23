@@ -1,4 +1,4 @@
-﻿# 🚦 TrafficForecast
+﻿# TrafficForecast
 ### Urban Traffic Pattern Analysis and Congestion Forecasting Using Drone-Based Traffic Monitoring
 
 <p align="center">
@@ -7,7 +7,6 @@
     <img src="https://img.shields.io/badge/Scikit--Learn-Machine%20Learning-orange"/>
     <img src="https://img.shields.io/badge/ARIMA-Time%20Series-red"/>
     <img src="https://img.shields.io/badge/Prophet-Forecasting-purple"/>
-    <img src="https://img.shields.io/badge/License-MIT-success"/>
 </p>
 
 ---
