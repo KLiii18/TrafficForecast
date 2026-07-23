@@ -1,4 +1,4 @@
-# 🚦 TrafficForecast
+﻿# 🚦 TrafficForecast
 ### Urban Traffic Pattern Analysis and Congestion Forecasting Using Drone-Based Traffic Monitoring
 
 <p align="center">
@@ -12,473 +12,147 @@
 
 ---
 
-# 📖 Overview
+# Overview
 
-TrafficForecast is a **Time Series Forecasting** project designed to analyze urban traffic patterns and predict future traffic congestion using data collected from drone-based traffic monitoring systems.
-
-Instead of forecasting from raw video directly, the project focuses on **traffic data analysis** after vehicle information has been extracted from aerial videos.
-
-The project follows a complete Data Science workflow:
-
-```
-Drone Video
-      │
-      ▼
-Vehicle Detection & Tracking
-      │
-      ▼
-Traffic Dataset
-      │
-      ▼
-Data Cleaning
-      │
-      ▼
-Exploratory Data Analysis
-      │
-      ▼
-Time Series Dataset
-      │
-      ▼
-Forecasting Models
-      │
-      ▼
-Traffic Congestion Prediction
-```
+TrafficForecast processes drone-derived vehicle tracking data and produces congestion forecasts using clustering and time-series models. The pipeline focuses on extracting structured traffic features, identifying congestion hotspots, and comparing ARIMA versus Prophet prediction performance.
 
 ---
 
-# 🎯 Objectives
+# Data
 
-The primary objectives of this project are:
+The raw traffic dataset includes these columns:
 
-- Analyze urban traffic flow
-- Explore traffic density patterns
-- Build time-series datasets
-- Forecast future traffic volume
-- Compare forecasting models
-- Evaluate prediction accuracy
-
----
-
-# 📂 Project Structure
-
-```
-TrafficForecast
-│
-├── notebooks/
-│   ├── 01_create_timeseries_dataset.ipynb
-│   ├── 02_eda_timeseries.ipynb
-│   ├── 03_baseline_arima.ipynb
-│   └── 04_prophet_baseline.ipynb
-│
-├── reports/
-│   ├── arima/
-│   └── prophet/
-│
-├── scripts/
-│   └── clean_each_file.py
-│
-├── src/
-│   ├── analysis/
-│   ├── preprocessing/
-│   ├── visualization/
-│   └── utils/
-│
-├── README.md
-├── README_ARIMA.md
-└── README_PROPHET.md
-```
+- `track_id`
+- `type`
+- `traveled_d`
+- `avg_speed`
+- `lat`
+- `lon`
+- `speed`
+- `lon_acc`
+- `lat_acc`
+- `time`
 
 ---
 
-# 📊 Dataset
+# Feature
 
-The project processes traffic monitoring data extracted from drone videos.
+The feature set used for modeling includes:
 
-Each observation represents traffic statistics collected during a fixed time interval.
+- `track_id`
+- `type`
+- `traveled_d`
+- `avg_speed`
+- `lat`
+- `lon`
+- `speed`
+- `lon_acc`
+- `lat_acc`
+- `time`
+- `timestamp_real`
+- `time_str`
+- `time_bin_5m`
+- `unique_track_id`
+- `grid_id`
+- `is_crawling`
+- `is_hard_braking`
+- `pce_factor`
 
-Typical features include:
-
-| Feature | Description |
-|----------|-------------|
-| Timestamp | Observation time |
-| Vehicle Count | Number of detected vehicles |
-| Average Speed | Average traffic speed |
-| Traffic Density | Density of vehicles |
-| Vehicle Type | Car, Bus, Truck, Motorcycle |
-| Lane Information | Road lane identifier |
-
-The processed dataset is transformed into a **time-series format**, where:
-
-- Time → Index
-- Vehicle Count → Prediction Target
-
----
-
-# 🔄 Workflow
-
-## 1. Data Cleaning
-
-Raw traffic datasets are cleaned by:
-
-- Removing invalid records
-- Handling missing values
-- Standardizing timestamps
-- Formatting columns
-- Filtering noisy samples
-
-Script:
-
-```
-scripts/clean_each_file.py
-```
+These engineered features support temporal binning, spatial indexing, and traffic behavior classification.
 
 ---
 
-## 2. Time Series Construction
+# Train / Test
 
-Notebook:
+The workflow uses a holdout split of:
 
-```
-01_create_timeseries_dataset.ipynb
-```
+- `75%` training
+- `25%` testing
 
-Tasks:
-
-- Convert timestamps
-- Aggregate traffic counts
-- Generate fixed interval observations
-- Create forecasting dataset
-
-Output:
-
-```
-traffic_density_timeseries.csv
-```
+This split evaluates model generalization to unseen traffic conditions.
 
 ---
 
-## 3. Exploratory Data Analysis
+# K-means
 
-Notebook:
+K-Means is applied to identify traffic congestion hotspots and spatial clusters.
 
-```
-02_eda_timeseries.ipynb
-```
+![K-Means hotspot map](src/models/kmeans/kmeans_hotspot_map.png)
 
-Includes:
+**K-Means final metrics:**
 
-- Distribution analysis
-- Correlation analysis
-- Vehicle distribution
-- Density visualization
-- Speed analysis
-- Traffic trends
-
-Visualizations include:
-
-- Histogram
-- Scatter Plot
-- Correlation Heatmap
-- Boxplot
-- Traffic Density Map
-- Vehicle Type Distribution
+- Silhouette Score = `0.3097`
+- Davies-Bouldin Index = `1.1522`
 
 ---
 
-# 📈 Forecasting Models
+# Arima
 
-The project compares two forecasting approaches.
-
----
-
-## Model 1 — ARIMA
-
-Notebook:
-
-```
-03_baseline_arima.ipynb
-```
-
-Pipeline:
-
-```
-Time Series
-
-↓
-
-Stationarity Test
-
-↓
-
-ADF Test
-
-↓
-
-ACF / PACF
-
-↓
-
-Grid Search
-
-↓
-
-Best ARIMA Model
-
-↓
-
-Prediction
-
-↓
-
-Evaluation
-```
-
-Features:
-
-- Stationarity checking
-- Automatic parameter tuning
-- Forecast future traffic volume
-
-Outputs:
-
-- Best model
-- Forecast figures
-- Performance metrics
-
----
-
-## Model 2 — Prophet
-
-Notebook:
-
-```
-04_prophet_baseline.ipynb
-```
-
-Pipeline:
-
-```
-Traffic Dataset
-
-↓
-
-Rename columns
-
-↓
-
-Train Prophet
-
-↓
-
-Forecast
-
-↓
-
-Evaluation
-```
-
-Prophet automatically models:
-
-- Trend
-- Seasonality
-- Holidays (optional)
-- Long-term changes
-
----
-
-# 📊 Evaluation Metrics
-
-The forecasting performance is evaluated using:
-
-- MAE (Mean Absolute Error)
-- RMSE (Root Mean Squared Error)
-- MAPE (Mean Absolute Percentage Error)
-- R² (the Coefficient of Determination)
-
-Comparison between ARIMA and Prophet is performed to determine the better forecasting model.
-
----
-
-# 📁 Reports
-
-The generated outputs are stored under:
-
-```
-reports/
-```
-
-Including:
-
-```
-reports/
-│
-├── arima/
-│   ├── figures/
-│   ├── models/
-│   └── tables/
-│
-└── prophet/
-    ├── figures/
-    ├── models/
-    └── tables/
-```
-
-Saved artifacts include:
-
-- Trained models
-- Prediction tables
-- Evaluation metrics
-- Forecast plots
-
----
-
-## Visual summary
-
-The following figures illustrate core results from the ARIMA and Prophet pipelines.
-
-![Vehicle count over time](reports/arima/figures/01_vehicle_count_over_time.png)
-
-*Traffic volume observed over time for the analyzed drone traffic dataset.*
+The ARIMA model forecasts traffic density on the processed time-series dataset.
 
 ![ARIMA forecast vs actual](reports/arima/figures/02_arima_forecast_vs_actual.png)
 
-*ARIMA model predictions compared with actual traffic volume in the test set.*
+**ARIMA final metrics:**
+
+- MAE = `991.7891097332208`
+- RMSE = `1340.8440748522846`
+- MAPE = `109.78352848281729%`
+- R2 = `0.07657161300859172`
+
+---
+
+# Prophet
+
+Prophet is evaluated as a second forecasting approach to compare against ARIMA.
 
 ![Prophet forecast vs actual](reports/prophet/figures/01_prophet_forecast_vs_actual.png)
 
-*Prophet forecast results with actual traffic measurements and forecast interval.*
+**Prophet final metrics:**
 
-![Prophet components](reports/prophet/figures/04_prophet_components.png)
-
-*Prophet model decomposition showing trend and daily seasonality behavior.*
-
-![Observed vs predicted traffic density (ARIMA and Prophet)](reports/comparison_of_obsesrved_and_predicted_traffic_density_using_arima_and_prophet.jpg)
-
-*Comparison of observed traffic density with ARIMA and Prophet forecasts.*
-
-![K-Means congestion hotspot map](src/models/kmeans/kmeans_hotspot_map.png)
-
-*K-Means clustering results showing congestion hotspot regions in the analyzed traffic dataset.*
-
-![K-Means cluster boxplots](src/models/kmeans/kmeans_proof_boxplots.png)
-
-*Cluster-level distribution of PCE volume and average speed as evidence of congestion segmentation.*
+- MAE = `1411.817931776563`
+- RMSE = `1531.2018068765954`
+- MAPE = `98.23793896304693%`
+- R2 = `-0.20423579582625195`
 
 ---
 
-# 🧠 Technologies
+# Comparison
 
-- Python
-- Pandas
-- NumPy
-- Matplotlib
-- Seaborn
-- Statsmodels
-- Prophet
-- Scikit-Learn
-- Jupyter Notebook
+The following figure compares observed traffic density with ARIMA and Prophet forecasts.
+
+![ARIMA vs Prophet comparison](reports/arima/figures/05_arima_vs_prophet.png)
 
 ---
 
-# 📌 Key Features
+# Environment Setup
 
-✔ Traffic Pattern Analysis
-
-✔ Traffic Density Analysis
-
-✔ Vehicle Count Forecasting
-
-✔ Time Series Construction
-
-✔ Exploratory Data Analysis
-
-✔ ARIMA Forecasting
-
-✔ Prophet Forecasting
-
-✔ Model Comparison
-
-✔ Visualization Dashboard
-
----
-
-# 🚀 How to Run
-
-## Clone repository
+## Setup
 
 ```bash
-git clone https://github.com/yourusername/TrafficForecast.git
-
-cd TrafficForecast
-```
-
----
-
-## Install dependencies
-
-```bash
+git clone https://github.com/KLiii18/TrafficForecast.git
+cd TrafficForecast/src
+python -m venv .venv
+.venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
----
+## K-means
 
-## Run notebooks
-
-Execute notebooks in the following order:
-
+```bash
+python models/kmeans/step2_kmeans_advanced.py
 ```
-01_create_timeseries_dataset.ipynb
 
-↓
+## Arima
 
-02_eda_timeseries.ipynb
+```bash
+python -m src.models.arima.train
+```
 
-↓
+## Prophet
 
-03_baseline_arima.ipynb
-
-↓
-
-04_prophet_baseline.ipynb
+```bash
+python -m src.models.prophet.train
 ```
 
 ---
 
-# 📈 Future Improvements
-
-Potential future work includes:
-
-- LSTM
-- GRU
-- Transformer-based Forecasting
-- Temporal Fusion Transformer
-- Graph Neural Networks
-- Real-time Traffic Prediction
-- Live Dashboard
-- API Deployment
-- Multi-camera Integration
-
----
-
-# 👥 Authors
-
-TrafficForecast was developed as an academic project focusing on traffic analysis and time-series forecasting using drone-based traffic monitoring data.
-
----
-
-# 📚 References
-
-- Facebook Prophet
-- Statsmodels ARIMA
-- Scikit-Learn Documentation
-- Pandas Documentation
-- Time Series Forecasting Literature
-
----
-
-# 📜 License
-
-This project is intended for educational and research purposes.
-
-MIT License.
