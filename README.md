@@ -352,6 +352,10 @@ The following figures illustrate core results from the ARIMA and Prophet pipelin
 
 *Prophet model decomposition showing trend and daily seasonality behavior.*
 
+![Observed vs predicted traffic density (ARIMA and Prophet)](reports/comparison_of_obsesrved_and_predicted_traffic_density_using_arima_and_prophet.jpg)
+
+*Comparison of observed traffic density with ARIMA and Prophet forecasts.*
+
 ![K-Means congestion hotspot map](src/models/kmeans/kmeans_hotspot_map.png)
 
 *K-Means clustering results showing congestion hotspot regions in the analyzed traffic dataset.*
