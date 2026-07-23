@@ -332,6 +332,28 @@ Saved artifacts include:
 
 ---
 
+## Visual summary
+
+The following figures illustrate core results from the ARIMA and Prophet pipelines.
+
+![Vehicle count over time](reports/arima/figures/01_vehicle_count_over_time.png)
+
+*Traffic volume observed over time for the analyzed drone traffic dataset.*
+
+![ARIMA forecast vs actual](reports/arima/figures/02_arima_forecast_vs_actual.png)
+
+*ARIMA model predictions compared with actual traffic volume in the test set.*
+
+![Prophet forecast vs actual](reports/prophet/figures/01_prophet_forecast_vs_actual.png)
+
+*Prophet forecast results with actual traffic measurements and forecast interval.*
+
+![Prophet components](reports/prophet/figures/04_prophet_components.png)
+
+*Prophet model decomposition showing trend and daily seasonality behavior.*
+
+---
+
 # 🧠 Technologies
 
 - Python
